@@ -1,6 +1,10 @@
 mod websocket;
+mod tradfri;
+mod settings;
 
 use actix_web::{middleware, App, HttpServer};
+use crate::tradfri::TradfriServer;
+use actix::prelude::*;
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
@@ -8,7 +12,9 @@ async fn main() -> std::io::Result<()> {
     env_logger::init();
 
     HttpServer::new(|| {
+        let addr = SyncArbiter::start(12, || TradfriServer::new());
         App::new()
+            .data(addr)
             // enable logger
             .wrap(middleware::Logger::default())
             // websocket route
