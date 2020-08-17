@@ -4,12 +4,14 @@ use actix_web_actors::ws;
 
 use crate::websocket::messages::*;
 use crate::websocket::ws_server::BroadcastServer;
+use crate::tradfri::TradfriServer;
 
 /// This is the individual session which is created
 /// for each client that connects to the url.
 pub struct WSSession {
     pub id: usize,
     pub addr: Addr<BroadcastServer>,
+    pub coap_addr: Addr<TradfriServer>,
 }
 
 impl Actor for WSSession {
