@@ -1,0 +1,37 @@
+<div id="scenes">
+  <h1>Scenes</h1>
+  <div class="scene-buttons">
+    <button
+      mat-raised-button
+      [color]="color('EVERYDAY')"
+      id="everyday"
+      (click)="onSceneChange('EVERYDAY')"
+    >
+      EVERYDAY
+    </button>
+    <button
+      mat-raised-button
+      [color]="color('FOCUS')"
+      id="focus"
+      (click)="onSceneChange('FOCUS')"
+    >
+      FOCUS
+    </button>
+    <button
+      mat-raised-button
+      [color]="color('RELAX')"
+      id="relax"
+      (click)="onSceneChange('RELAX')"
+    >
+      RELAX
+    </button>
+    <button
+      mat-raised-button
+      [color]="color('CUSTOM')"
+      id="custom"
+      (click)="onSceneChange('CUSTOM')"
+    >
+      CUSTOM
+    </button>
+  </div>
+</div>
