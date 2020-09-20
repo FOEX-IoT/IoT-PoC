@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MessageService } from './message.service'
 
 @Component({
   selector: 'app-root',
@@ -10,5 +11,11 @@ export class AppComponent {
 
   onTouchEnd() {
     console.log('asdf');
+  }
+
+  constructor(private chatService: MessageService) {
+    chatService.messages.subscribe(msg => {
+      console.log("Response from websocket: " + msg);
+    });
   }
 }
