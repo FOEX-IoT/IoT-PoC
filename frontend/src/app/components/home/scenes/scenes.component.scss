@@ -1,0 +1,29 @@
+#scenes {
+  text-align: center;
+}
+
+.scene-buttons {
+  display: grid;
+  grid-template-areas:
+    ". everyday focus ."
+    ". relax custom .";
+  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: 1fr repeat(2, 2fr) 1fr;
+  row-gap: 1.5em;
+  column-gap: 1.5em;
+  #everyday {
+    grid-area: everyday;
+  }
+
+  #focus {
+    grid-area: focus;
+  }
+
+  #relax {
+    grid-area: relax;
+  }
+
+  #custom {
+    grid-area: custom;
+  }
+}

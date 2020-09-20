@@ -1,0 +1,43 @@
+.root {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-areas:
+    "header"
+    "scenes"
+    "divider"
+    "lamps";
+  grid-template-rows: minmax(4em, 2fr) 5fr 0.5fr 12fr;
+  row-gap: 1.5em;
+
+  & > *:not(.headerWrapper) {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .headerWrapper {
+    width: 100%;
+    height: 100%;
+    grid-area: header;
+  }
+  .scenesWrapper {
+    width: 100%;
+    height: 100%;
+    grid-area: scenes;
+  }
+  .lampsWrapper {
+    width: 100%;
+    height: 100%;
+    grid-area: lamps;
+  }
+  .divider {
+    grid-area: divider;
+    width: 80%;
+    margin: 0 auto;
+
+    & > * {
+      width: 100%;
+    }
+  }
+}

@@ -1,0 +1,29 @@
+<mat-expansion-panel
+  class="lamp"
+  (opened)="changeActive()"
+  (closed)="changeClosed()"
+>
+  <mat-expansion-panel-header>
+    <h3 class="name">{{ lamp.name }}</h3>
+  </mat-expansion-panel-header>
+  <div class="content">
+    <mat-slider
+      min="0"
+      max="100"
+      step="2"
+      (value)="(lamp.brightness)"
+      (touchend)="changeBrightness($event)"
+      (mouseup)="changeBrightness($event)"
+      thumbLabel
+    ></mat-slider>
+    <button
+      mat-fab
+      (click)="toggleStatus()"
+      [ngClass]="{ off: lamp.status === 'off' }"
+    >
+      <mat-icon fontSet="material-icons-outlined" color="#123123">
+        emoji_objects
+      </mat-icon>
+    </button>
+  </div>
+</mat-expansion-panel>
