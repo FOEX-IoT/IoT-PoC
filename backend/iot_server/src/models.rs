@@ -63,27 +63,22 @@ use std::convert::TryFrom;
 
 #[derive(Deserialize, Serialize, Debug, Eq, PartialEq, Clone)]
 pub struct Lamp {
-  #[serde(rename = "9001")]
-  pub name: String,
-  #[serde(rename = "9003")]
-  pub instance_id: i32,
-  #[serde(rename = "5750")]
-  pub is_on: i32,
-  #[serde(rename = "5851")]
-  pub brightness: u8,
-}
-
-impl Lamp {
-  pub fn is_on(&self) -> bool {
-    self.is_on == 1
-  }
+    #[serde(rename = "9001")]
+    pub name: String,
+    #[serde(rename = "9003")]
+    pub instance_id: i32,
+    #[serde(rename = "5750")]
+    pub is_on: i32,
+    #[serde(rename = "5851")]
+    pub brightness: u8,
 }
 
 impl TryFrom<Value> for Lamp {
-  type Error = APIError;
+    type Error = APIError;
 
-  fn try_from(value: Value) -> Result<Self, Self::Error> {
-    //value.get("9001").ok_or(APIError::InternalServerError)
-    let name = value.get("9001").ok_or(APIError::InternalServerError);
-  }
+    fn try_from(value: Value) -> Result<Self, Self::Error> {
+        //value.get("9001").ok_or(APIError::InternalServerError)
+        //let name = value.get("9001").ok_or(APIError::InternalServerError);
+        todo!()
+    }
 }

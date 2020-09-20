@@ -1,10 +1,10 @@
-use crate::websocket::messages::Message as ServerMessage;
+use crate::websocket::messages::BCMessage;
 use actix::*;
 use actix_web_actors::ws;
 
+use crate::tradfri::TradfriServer;
 use crate::websocket::messages::*;
 use crate::websocket::ws_server::BroadcastServer;
-use crate::tradfri::TradfriServer;
 
 /// This is the individual session which is created
 /// for each client that connects to the url.
@@ -43,10 +43,10 @@ impl Actor for WSSession {
 }
 
 /// Handle messages which are received from the server (i.e. updates)
-impl Handler<ServerMessage> for WSSession {
+impl Handler<BCMessage> for WSSession {
     type Result = ();
 
-    fn handle(&mut self, msg: ServerMessage, ctx: &mut Self::Context) {
+    fn handle(&mut self, msg: BCMessage, ctx: &mut Self::Context) {
         ctx.text(msg.0);
     }
 }
@@ -65,10 +65,7 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for WSSession {
         match msg {
             ws::Message::Ping(_) => {}
             ws::Message::Pong(_) => {}
-            ws::Message::Text(text) => {
-                let m = text.trim();
-                self.handle_text_message(m);
-            }
+            ws::Message::Text(_) => {}
             ws::Message::Binary(_) => println!("Unexpected binary"),
             ws::Message::Close(reason) => {
                 ctx.close(reason);
@@ -79,12 +76,5 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for WSSession {
             }
             ws::Message::Nop => (),
         }
-    }
-}
-
-impl WSSession {
-    /// This function is invoked once a client sends a message (i.e. a command)
-    fn handle_text_message(&mut self, message: &str) {
-        // TODO maybe send a message to the broadcast server / to the coap server
     }
 }

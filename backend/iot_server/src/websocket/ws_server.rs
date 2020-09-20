@@ -1,4 +1,4 @@
-use crate::websocket::messages::Message as ServerMessage;
+use crate::websocket::messages::BCMessage;
 use crate::websocket::messages::*;
 use actix::prelude::*;
 use rand::{self, rngs::ThreadRng, Rng};
@@ -7,7 +7,7 @@ use std::collections::HashMap;
 /// This server is used to notify all the connected
 /// clients of any changes
 pub struct BroadcastServer {
-    sessions: HashMap<usize, Recipient<ServerMessage>>,
+    sessions: HashMap<usize, Recipient<BCMessage>>,
     rng: ThreadRng,
 }
 
@@ -21,14 +21,11 @@ impl Default for BroadcastServer {
 }
 
 impl BroadcastServer {
-    /// Send message to all users (which aren't to be skipped)
-    fn send_message(&self, message: &str, skip_id: usize) {
-        self.sessions
-            .iter()
-            .filter(|(id, _)| **id != skip_id) // exclude the id to be skipped
-            .for_each(|(_, addr)| {
-                let _ = addr.do_send(ServerMessage(message.to_owned()));
-            });
+    /// Send message to all users
+    fn send_message(&self, message: &str) {
+        self.sessions.iter().for_each(|(_, addr)| {
+            let _ = addr.do_send(BCMessage(message.to_owned()));
+        });
     }
 }
 
@@ -55,5 +52,14 @@ impl Handler<Disconnect> for BroadcastServer {
     fn handle(&mut self, msg: Disconnect, _: &mut Context<Self>) {
         // remove address
         self.sessions.remove(&msg.id);
+    }
+}
+
+/// Handle messages which are received from the server (i.e. updates)
+impl Handler<BCMessage> for BroadcastServer {
+    type Result = ();
+
+    fn handle(&mut self, msg: BCMessage, ctx: &mut Self::Context) {
+        self.send_message(&msg.0);
     }
 }
