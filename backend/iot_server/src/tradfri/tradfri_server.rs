@@ -29,7 +29,13 @@ impl Handler<GetAllLampsMessage> for TradfriServer {
 
     fn handle(&mut self, _: GetAllLampsMessage, _: &mut Self::Context) -> Self::Result {
         // TODO retrieve & parse lamps from coap request
-        Ok(vec![])
+        let lamp = Lamp {
+            instance_id: 2005,
+            name: "Denis".to_owned(),
+            status: false,
+            brightness: 128,
+        };
+        Ok(vec![lamp])
     }
 }
 

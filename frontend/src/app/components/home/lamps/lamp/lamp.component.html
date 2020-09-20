@@ -2,6 +2,7 @@
   class="lamp"
   (opened)="changeActive()"
   (closed)="changeClosed()"
+  [expanded]="isActive === lamp.instanceId"
 >
   <mat-expansion-panel-header>
     <h3 class="name">{{ lamp.name }}</h3>
@@ -11,15 +12,14 @@
       min="0"
       max="100"
       step="2"
-      (value)="(lamp.brightness)"
-      (touchend)="changeBrightness($event)"
-      (mouseup)="changeBrightness($event)"
+      [value]="lamp.brightness"
+      (change)="changeBrightness($event)"
       thumbLabel
     ></mat-slider>
     <button
       mat-fab
       (click)="toggleStatus()"
-      [ngClass]="{ off: lamp.status === 'off' }"
+      [ngClass]="{ off: !lamp.status }"
     >
       <mat-icon fontSet="material-icons-outlined" color="#123123">
         emoji_objects

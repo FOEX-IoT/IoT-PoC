@@ -16,6 +16,7 @@ use crate::websocket::ws_session::WSSession;
 use actix::prelude::*;
 use actix_web::*;
 use actix_web_actors::ws;
+use actix_cors::Cors;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -32,6 +33,10 @@ async fn main() -> std::io::Result<()> {
             .app_data(bc_addr.clone())
             // enable logger
             .wrap(middleware::Logger::default())
+            .wrap(
+                Cors::new() // <- Construct CORS middleware builder
+                    .finish(),
+            )
             // websocket route
             .service(web::scope("/api").configure(url_config))
             .service(web::resource("/ws/").route(web::get().to(index)))

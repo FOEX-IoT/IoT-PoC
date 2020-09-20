@@ -19,6 +19,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSliderModule } from '@angular/material/slider';
 
+import { HttpClientModule } from '@angular/common/http';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,6 +42,7 @@ import { MatSliderModule } from '@angular/material/slider';
     MatIconModule,
     MatExpansionModule,
     MatSliderModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

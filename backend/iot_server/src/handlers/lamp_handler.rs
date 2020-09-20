@@ -1,5 +1,6 @@
 use crate::prelude::*;
 use crate::tradfri::tradfri_messages::*;
+use serde_json::json;
 
 pub async fn get_all_lamps(ls: web::Data<Addr<TradfriServer>>) -> Result<HttpResponse, APIError> {
     let lamps = ls.send(GetAllLampsMessage {}).await??;
@@ -12,7 +13,13 @@ pub async fn change_status_of_lamp(
     update: web::Json<ChangeStatusRequest>,
 ) -> Result<HttpResponse, APIError> {
     let update = update.into_inner();
-    let update_str = serde_json::to_string(&update)?;
+
+    let data = json!({
+        "type": "LAMP",
+        "values": &update,
+    });
+
+    let update_str = serde_json::to_string(&data)?;
 
     // send the message the tradfri server which performs the coap request
     ls.send(update).await??;
@@ -29,7 +36,13 @@ pub async fn change_brightness_of_lamp(
     update: web::Json<ChangeBrightnessRequest>,
 ) -> Result<HttpResponse, APIError> {
     let update = update.into_inner();
-    let update_str = serde_json::to_string(&update)?;
+
+    let data = json!({
+        "type": "LAMP",
+        "values": &update,
+    });
+
+    let update_str = serde_json::to_string(&data)?;
 
     // send the message the tradfri server which performs the coap request
     ls.send(update).await??;
@@ -46,7 +59,13 @@ pub async fn change_scene(
     update: web::Json<ChangeSceneRequest>,
 ) -> Result<HttpResponse, APIError> {
     let update = update.into_inner();
-    let update_str = serde_json::to_string(&update)?;
+
+    let data = json!({
+        "type": "SCENES",
+        "values": &update,
+    });
+
+    let update_str = serde_json::to_string(&data)?;
 
     // send the message the tradfri server which performs the coap request
     ls.send(update).await??;

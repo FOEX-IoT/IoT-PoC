@@ -35,23 +35,20 @@ export class LampComponent implements OnInit {
   }
 
   changeActive() {
-    this.lampsService.activeLamp.next(this.lamp.id);
+    this.lampsService.activeLamp.next(this.lamp.instanceId);
   }
 
   changeClosed() {
-    if (this.isActive === this.lamp.id) {
+    if (this.isActive === this.lamp.instanceId) {
       this.lampsService.activeLamp.next(-1);
     }
   }
 
   changeBrightness(event: Event) {
-    console.log(this.lamp);
-    let input = event.currentTarget as HTMLInputElement;
-    this.lampsService.changeBrightness(input.valueAsNumber, this.lamp.id);
-    this.scenesService.setScene('CUSTOM');
+    this.lampsService.changeBrightness(event.value, this.lamp.instanceId)
   }
 
   toggleStatus() {
-    this.lampsService.toggleStatus(this.lamp.id);
+    this.lampsService.toggleStatus(this.lamp.instanceId);
   }
 }

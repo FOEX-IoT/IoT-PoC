@@ -1,8 +1,8 @@
 export type Status = 'on' | 'off';
 
 export interface Lamp {
-  id: number;
+  instanceId: number;
   name: string;
   brightness: number;
-  status: Status;
+  status: boolean;
 }

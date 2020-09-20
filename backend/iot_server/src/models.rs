@@ -63,13 +63,13 @@ use std::convert::TryFrom;
 
 #[derive(Deserialize, Serialize, Debug, Eq, PartialEq, Clone)]
 pub struct Lamp {
-    #[serde(rename = "9001")]
+    #[serde(rename = "name")]
     pub name: String,
-    #[serde(rename = "9003")]
+    #[serde(rename = "instanceId")]
     pub instance_id: i32,
-    #[serde(rename = "5750")]
-    pub is_on: i32,
-    #[serde(rename = "5851")]
+    #[serde(rename = "status")]
+    pub status: bool,
+    #[serde(rename = "brightness")]
     pub brightness: u8,
 }
 
