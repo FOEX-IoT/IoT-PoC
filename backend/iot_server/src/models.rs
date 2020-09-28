@@ -47,6 +47,28 @@ coap-client -m get -u "$TF_USERNAME" -k "$TF_PRESHARED_KEY" "coaps://$TF_GATEWAY
 */
 
 /*
+change the brightness of a device
+coap-client -m put -u "$TF_USERNAME" -k "$TF_PRESHARED_KEY" -e '{ "3311": [{ "5851": 127 }] }' "coaps://$TF_GATEWAYIP:5684/15001/$TF_DEVICEID"
+
+here basically everything a payload can contain:
+{
+  "3311": [
+    {
+      "5850": 1, // on / off
+      "5851": 254, // dimmer (1 to 254)
+      "5712": 10 // transition time (fade time)
+      // THIS IS USELESS FOR US
+      "5706": "f1e0b5", // color in HEX (Don't use in combination with: color X and/or color Y)
+      "5709": 65535, // color X (Only use in combination with color Y)
+      "5710": 65535, // color Y (Only use in combination with color X)
+    }
+  ]
+}
+
+you just put the json into the -e field
+*/
+
+/*
 3311: is a lamp
 
 9001: Name
@@ -63,22 +85,22 @@ use std::convert::TryFrom;
 
 #[derive(Deserialize, Serialize, Debug, Eq, PartialEq, Clone)]
 pub struct Lamp {
-    #[serde(rename = "name")]
-    pub name: String,
-    #[serde(rename = "instanceId")]
-    pub instance_id: i32,
-    #[serde(rename = "status")]
-    pub status: bool,
-    #[serde(rename = "brightness")]
-    pub brightness: u8,
+  #[serde(rename = "name")]
+  pub name: String,
+  #[serde(rename = "instanceId")]
+  pub instance_id: i32,
+  #[serde(rename = "status")]
+  pub status: bool,
+  #[serde(rename = "brightness")]
+  pub brightness: u8,
 }
 
 impl TryFrom<Value> for Lamp {
-    type Error = APIError;
+  type Error = APIError;
 
-    fn try_from(value: Value) -> Result<Self, Self::Error> {
-        //value.get("9001").ok_or(APIError::InternalServerError)
-        //let name = value.get("9001").ok_or(APIError::InternalServerError);
-        todo!()
-    }
+  fn try_from(value: Value) -> Result<Self, Self::Error> {
+    //value.get("9001").ok_or(APIError::InternalServerError)
+    //let name = value.get("9001").ok_or(APIError::InternalServerError);
+    todo!()
+  }
 }
