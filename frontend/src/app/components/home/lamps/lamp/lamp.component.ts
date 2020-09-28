@@ -45,7 +45,7 @@ export class LampComponent implements OnInit {
   }
 
   changeBrightness(event: Event) {
-    this.lampsService.changeBrightness(event.value, this.lamp.instanceId)
+    this.lampsService.changeBrightness((event as any).value, this.lamp.instanceId)
   }
 
   toggleStatus() {

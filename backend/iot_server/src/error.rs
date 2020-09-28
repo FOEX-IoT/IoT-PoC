@@ -3,7 +3,9 @@ use actix::MailboxError;
 use actix_web::{error::BlockingError, HttpResponse, ResponseError};
 use derive_more::{Display, From};
 use serde_json::error::Error as SerdeJsonError;
+use std::io::Error as IOError;
 use std::error::Error;
+use std::string::FromUtf8Error;
 
 #[derive(Debug, Display, From)]
 pub enum APIError {
@@ -32,6 +34,7 @@ impl From<BlockingError<APIError>> for APIError {
     }
 }
 
-//generate_internal_server_error!(IOError);
+generate_internal_server_error!(IOError);
 generate_internal_server_error!(MailboxError);
 generate_internal_server_error!(SerdeJsonError);
+generate_internal_server_error!(FromUtf8Error);
