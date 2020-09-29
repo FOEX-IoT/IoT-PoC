@@ -59,7 +59,7 @@ impl Handler<Disconnect> for BroadcastServer {
 impl Handler<BCMessage> for BroadcastServer {
     type Result = ();
 
-    fn handle(&mut self, msg: BCMessage, ctx: &mut Self::Context) {
+    fn handle(&mut self, msg: BCMessage, _ctx: &mut Self::Context) {
         self.send_message(&msg.0);
     }
 }

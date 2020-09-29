@@ -3,8 +3,9 @@ use actix::MailboxError;
 use actix_web::{error::BlockingError, HttpResponse, ResponseError};
 use derive_more::{Display, From};
 use serde_json::error::Error as SerdeJsonError;
-use std::io::Error as IOError;
 use std::error::Error;
+use std::io::Error as IOError;
+use std::net::AddrParseError;
 use std::string::FromUtf8Error;
 
 #[derive(Debug, Display, From)]
@@ -38,3 +39,4 @@ generate_internal_server_error!(IOError);
 generate_internal_server_error!(MailboxError);
 generate_internal_server_error!(SerdeJsonError);
 generate_internal_server_error!(FromUtf8Error);
+generate_internal_server_error!(AddrParseError);

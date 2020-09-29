@@ -39,3 +39,16 @@ pub enum Scene {
 impl Message for ChangeSceneRequest {
     type Result = Result<(), APIError>;
 }
+
+/// This implementation is used to determine the appropriate brightness
+/// for the actual enum variants
+impl From<Scene> for i32 {
+    fn from(scene: Scene) -> i32 {
+        match scene {
+            Scene::RELAX => 50,
+            Scene::EVERYDAY => 80,
+            Scene::FOCUS => 150,
+            Scene::CUSTOM => -1,
+        }
+    }
+}

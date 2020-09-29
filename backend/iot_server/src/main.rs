@@ -14,9 +14,9 @@ use crate::urls::url_config;
 use crate::websocket::ws_server::BroadcastServer;
 use crate::websocket::ws_session::WSSession;
 use actix::prelude::*;
+use actix_cors::Cors;
 use actix_web::*;
 use actix_web_actors::ws;
-use actix_cors::Cors;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
