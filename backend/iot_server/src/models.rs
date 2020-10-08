@@ -86,89 +86,95 @@ use std::convert::TryFrom;
 
 #[derive(Deserialize, Serialize, Debug, Eq, PartialEq, Clone)]
 pub struct Lamp {
-    #[serde(rename = "name")]
-    pub name: String,
-    #[serde(rename = "instanceId")]
-    pub instance_id: i64,
-    #[serde(rename = "status")]
-    pub status: bool,
-    #[serde(rename = "brightness")]
-    pub brightness: u8,
+  #[serde(rename = "name")]
+  pub name: String,
+  #[serde(rename = "instanceId")]
+  pub instance_id: i64,
+  #[serde(rename = "status")]
+  pub status: bool,
+  #[serde(rename = "brightness")]
+  pub brightness: u8,
 }
 
 impl TryFrom<Value> for Lamp {
-    type Error = APIError;
+  type Error = APIError;
 
-    fn try_from(value: Value) -> Result<Self, Self::Error> {
-        //{"9001":"","9002":1597443583,"9020":104,"9003":65540,"9054":0,"5750":0,"9019":1,"3":{"0":"IKEA of Sweden","1":"TRADFRI bulb E27 WW 806lm","2":"","3":"2.1.022","6":1},"15009":[{"5850":1,"9003":0,"5851":25}]}
-        let name: String = value
-            .get("3")
-            .ok_or(APIError::InternalServerError)?
-            .get("1")
-            .ok_or(APIError::InternalServerError)?
-            .as_str()
-            .ok_or(APIError::InternalServerError)?
-            .to_owned();
+  fn try_from(value: Value) -> Result<Self, Self::Error> {
+    //{"9001":"","9002":1597443583,"9020":104,"9003":65540,"9054":0,"5750":0,"9019":1,"3":{"0":"IKEA of Sweden","1":"TRADFRI bulb E27 WW 806lm","2":"","3":"2.1.022","6":1},"15009":[{"5850":1,"9003":0,"5851":25}]}
+    println!("parsing {:?}!", value);
+    let name: String = value
+      .get("3")
+      .ok_or(APIError::InternalServerError)?
+      .get("1")
+      .ok_or(APIError::InternalServerError)?
+      .as_str()
+      .ok_or(APIError::InternalServerError)?
+      .to_owned();
 
-        let sub: &Value = value
-            .get("15009")
-            .ok_or(APIError::InternalServerError)?
-            .as_array()
-            .ok_or(APIError::InternalServerError)?
-            .get(0)
-            .ok_or(APIError::InternalServerError)?;
+    println!("parsed name!");
+    let sub: &Value = value
+      .get("15009")
+      .ok_or(APIError::InternalServerError)?
+      .as_array()
+      .ok_or(APIError::InternalServerError)?
+      .get(0)
+      .ok_or(APIError::InternalServerError)?;
 
-        let instance_id: i64 = sub
-            .get("9003")
-            .ok_or(APIError::InternalServerError)?
-            .as_i64()
-            .ok_or(APIError::InternalServerError)?;
+    println!("parsed sub!");
+    let instance_id: i64 = sub
+      .get("9003")
+      .ok_or(APIError::InternalServerError)?
+      .as_i64()
+      .ok_or(APIError::InternalServerError)?;
 
-        let status: bool = {
-            sub.get("5850")
-                .ok_or(APIError::InternalServerError)?
-                .as_i64()
-                .ok_or(APIError::InternalServerError)?
-                == 1
-        };
+    println!("parsed instance id!");
+    let status: bool = {
+      sub
+        .get("5850")
+        .ok_or(APIError::InternalServerError)?
+        .as_i64()
+        .ok_or(APIError::InternalServerError)?
+        == 1
+    };
 
-        let brightness: i64 = sub
-            .get("5851")
-            .ok_or(APIError::InternalServerError)?
-            .as_i64()
-            .ok_or(APIError::InternalServerError)?;
-
-        Ok(Lamp {
-            name,
-            instance_id,
-            status,
-            brightness: brightness as u8,
-        })
-    }
+    println!("parsed status!");
+    let brightness: i64 = sub
+      .get("5851")
+      .ok_or(APIError::InternalServerError)?
+      .as_i64()
+      .ok_or(APIError::InternalServerError)?;
+    println!("parsed brightness!");
+    Ok(Lamp {
+      name,
+      instance_id,
+      status,
+      brightness: brightness as u8,
+    })
+  }
 }
 
 #[cfg(test)]
 mod tests {
-    #[test]
-    fn test_lamp() {
-        use super::Lamp;
-        use serde_json::Value;
-        use std::convert::TryFrom;
+  #[test]
+  fn test_lamp() {
+    use super::Lamp;
+    use serde_json::Value;
+    use std::convert::TryFrom;
 
-        let input = r#"{"9001":"","9002":1597443583,"9020":104,"9003":65540,"9054":0,"5750":0,"9019":1,"3":{"0":"IKEA of Sweden","1":"TRADFRI bulb E27 WW 806lm","2":"","3":"2.1.022","6":1},"15009":[{"5850":1,"9003":0,"5851":25}]}"#;
+    let input = r#"{"9001":"","9002":1597443583,"9020":104,"9003":65540,"9054":0,"5750":0,"9019":1,"3":{"0":"IKEA of Sweden","1":"TRADFRI bulb E27 WW 806lm","2":"","3":"2.1.022","6":1},"15009":[{"5850":1,"9003":0,"5851":25}]}"#;
 
-        let value: Value = serde_json::from_str(input).unwrap();
+    let value: Value = serde_json::from_str(input).unwrap();
 
-        let lamp: Lamp = Lamp::try_from(value).unwrap();
+    let lamp: Lamp = Lamp::try_from(value).unwrap();
 
-        assert_eq!(
-            Lamp {
-                name: "TRADFRI bulb E27 WW 806lm".to_owned(),
-                instance_id: 0,
-                status: true,
-                brightness: 25
-            },
-            lamp
-        );
-    }
+    assert_eq!(
+      Lamp {
+        name: "TRADFRI bulb E27 WW 806lm".to_owned(),
+        instance_id: 0,
+        status: true,
+        brightness: 25
+      },
+      lamp
+    );
+  }
 }

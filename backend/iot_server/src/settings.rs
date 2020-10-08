@@ -1,3 +1,3 @@
-pub const SERVER_ADDR: &'static str = "127.0.0.1:9001";
-pub const KEY: &'static str = "1234";
-pub const ID: &'static str = "CoaP";
+pub const SERVER_ADDR: &'static str = "192.168.1.10:5684";
+pub const KEY: &'static str = "MnM9uZaRoDp6ftrl";
+pub const ID: &'static str = "nvslab1";
