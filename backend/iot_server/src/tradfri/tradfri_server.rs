@@ -26,7 +26,7 @@ impl Actor for TradfriServer {
 impl TradfriServer {
     pub fn new() -> Self {
         Self {
-            client: DTLSCoAPClient::new(SERVER_ADDR, KEY.to_owned(), ID.to_owned())
+            client: DTLSCoAPClient::new(SERVER_ADDR)
                 .expect("Error connecting to coap server on tradfri."),
             lamp_ids: vec![],
         }
